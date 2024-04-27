@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compass App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .compass {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 10px solid #ccc;
+            position: relative;
+        }
+        .needle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: center bottom;
+            transform: translate(-50%, -100%) rotate(0deg);
+            width: 2px;
+            height: 50%;
+            background-color: red;
+            border-radius: 2px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .heading {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="compass" id="compass">
+        <div class="needle" id="needle"></div>
+        <div class="heading" id="heading">North</div>
+    </div>
+
+    <script>
+        window.addEventListener('deviceorientation', handleOrientation);
+
+        function handleOrientation(event) {
+            var alpha = event.alpha; // Compass direction (0-360 degrees)
+            var heading = document.getElementById('heading');
+            var needle = document.getElementById('needle');
+
+            if (alpha !== null) {
+                var compassHeading = Math.round(alpha);
+                var rotation = 'rotate(' + (360 - compassHeading) + 'deg)';
+                needle.style.transform = rotation;
+
+                // Determine cardinal direction
+                var directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+                var index = Math.round(compassHeading / 45) % 8;
+                var direction = directions[index];
+                heading.textContent = direction;
+            }
+        }
+    </script>
+</body>
+</html>
